@@ -1,3 +1,6 @@
+# gitignore for Joren his videos
+videos_640x360/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
