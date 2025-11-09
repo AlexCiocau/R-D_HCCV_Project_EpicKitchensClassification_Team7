@@ -3,6 +3,8 @@ from decord import VideoReader, cpu
 import pandas as pd
 import numpy as np
 import torch
+import os
+from tqdm import tqdm
 
 class EpicKitchensDataset(Dataset):
     """
@@ -18,10 +20,40 @@ class EpicKitchensDataset(Dataset):
         # Import annotations
         path_to_annotations = path_to_data + '/annotations/EPIC_100_train.csv'
         print("Here is the path to annotations: ", path_to_annotations)
-        self.annotations = pd.read_csv(path_to_annotations)
+        all_annotations = pd.read_csv(path_to_annotations)
 
         # Import videos
         self.path_to_video = path_to_data + "/videos_640x360"
+
+        # Filter annotations: keep only the ones in the reduced dataset
+        print("Filtering annotations... this may take a moment.")
+        self.annotations = self.filter_annotations(all_annotations)
+        print(f"Dataset reduced from {len(all_annotations)} to {len(self.annotations)} available samples.")
+
+        if len(self.annotations) == 0:
+            raise RuntimeError("No valid video files found! Check your data paths.")
+        
+        
+
+    def filter_annotations(self, all_annotations):
+        """
+        Loops through the dataframe and keeps only the rows
+        where the corresponding video file exists.
+        """
+        valid_annotations = []
+        
+        # Use tqdm for a nice progress bar
+        for _, row in tqdm(all_annotations.iterrows(), total=all_annotations.shape[0]):
+            video_id = row['video_id']
+            participant = row['participant_id']
+            
+            video_path = os.path.join(self.path_to_video, participant, f"{video_id}.MP4")
+            
+            if os.path.exists(video_path):
+                valid_annotations.append(row.to_dict())
+                
+        # Convert the list of valid dicts back to a DataFrame
+        return pd.DataFrame(valid_annotations)
 
     def __len__(self):
         # Return the total number of samples
@@ -53,6 +85,7 @@ class EpicKitchensDataset(Dataset):
             
             # 3D CNN will expect [Channels, Frames, Height, Width]
             clip_tensor = clip_tensor.permute(3, 0, 1, 2) # [C, T, H, W]
+            clip_tensor = clip_tensor.float() / 255.0
             return clip_tensor, label
         except Exception as e:
             pass
