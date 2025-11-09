@@ -11,16 +11,16 @@ if __name__ == '__main__':
     # Instantiate dataset class
     train_dataset = EpicKitchensDataset(
         path_to_data= './EPIC-KITCHENS',
-        num_frames=32,
+        num_frames=16,
         transform=None
     )
 
     # Create the DataLoader
     train_loader = torch.utils.data.DataLoader(
         dataset=train_dataset,
-        batch_size=8,
+        batch_size=4,
         shuffle=True,      
-        num_workers=4    
+        num_workers=4       
     )
 
     # Set up your device, model, loss, and optimizer

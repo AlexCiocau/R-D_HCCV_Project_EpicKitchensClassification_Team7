@@ -5,6 +5,8 @@ import numpy as np
 import torch
 import os
 from tqdm import tqdm
+import torch.nn.functional as F
+from torchvision.transforms import functional as TF
 
 class EpicKitchensDataset(Dataset):
     """
@@ -74,7 +76,7 @@ class EpicKitchensDataset(Dataset):
             # Retrieve video
             video_path = f"{self.path_to_video}/{participant}/{video_id}.MP4"
             print("Here is the path to the video: ", video_path)
-            v_reader = VideoReader(video_path)
+            v_reader = VideoReader(video_path, ctx=cpu(0))
 
             # Select <num_frames> equally spaced frames between start_frame and stop_frame
             frame_indices_to_sample = np.linspace(start_frame, stop_frame, num=self.num_frames, dtype=int)
@@ -84,7 +86,16 @@ class EpicKitchensDataset(Dataset):
             clip_tensor = torch.from_numpy(frames_np)
             
             # 3D CNN will expect [Channels, Frames, Height, Width]
-            clip_tensor = clip_tensor.permute(3, 0, 1, 2) # [C, T, H, W]
+            # clip_tensor = clip_tensor.permute(3, 0, 1, 2) # [C, T, H, W]
+            clip_tensor = clip_tensor.permute(0, 3, 1, 2)
+
+            # 2. Resize H and W
+            #    (from [16, 3, 360, 640] to [16, 3, 224, 224])
+            clip_tensor = TF.resize(clip_tensor, (224, 224))
+            
+            # 3. Permute to [C, T, H, W] for the 3D CNN model
+            #    (from [16, 3, 224, 224] to [3, 16, 224, 224])
+            clip_tensor = clip_tensor.permute(1, 0, 2, 3)
             clip_tensor = clip_tensor.float() / 255.0
             return clip_tensor, label
         except Exception as e:
