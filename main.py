@@ -4,18 +4,71 @@ from ThreeD_CNN import ThreeD_CNN
 import torch.nn as nn
 from tqdm import tqdm
 
-# This is the "main" part of your script.
-# Put all the execution logic inside this block.
+
+def evaluate_model(model, dataloader, device):
+    """
+    Runs the model on the test set and returns the accuracy.
+    """
+    # 1. Set model to evaluation mode
+    # This turns off dropout and other training-specific layers
+    model.eval()
+    
+    total_correct = 0
+    total_samples = 0
+    
+    # 2. Set up the progress bar
+    eval_loop = tqdm(dataloader, desc="Evaluating", leave=False)
+    
+    # 3. Disable gradient calculation
+    # We don't need gradients for evaluation, so this saves memory
+    with torch.no_grad():
+        for video_batch, labels_batch in eval_loop:
+            
+            # Move data to the GPU
+            video_batch = video_batch.to(device)
+            labels_batch = labels_batch.to(device)
+            
+            # --- Handle bad batches (if any) ---
+            # This skips any dummy data your dataloader might return
+            # from corrupt files (where label is -1)
+            valid_indices = labels_batch != -1
+            if not valid_indices.any():
+                continue # Skip batch if all samples are bad
+                
+            video_batch = video_batch[valid_indices]
+            labels_batch = labels_batch[valid_indices]
+            # --- End of bad batch handling ---
+
+            # 4. Get model predictions (forward pass)
+            outputs = model(video_batch)
+            
+            # 5. Get the predicted class (the one with the highest score)
+            # outputs shape is [B, 125]
+            # predictions shape is [B]
+            _, predictions = torch.max(outputs, 1)
+            
+            # 6. Count correct predictions
+            total_samples += labels_batch.size(0)
+            total_correct += (predictions == labels_batch).sum().item()
+
+    # 7. Calculate final accuracy
+    accuracy = 100 * total_correct / total_samples
+    return accuracy
+
+
+
 if __name__ == '__main__':
 
-    # Instantiate dataset class
+
+    # ------------------------------- TRAINING DATASET -------------------------------
+    # Training Dataset
     train_dataset = EpicKitchensDataset(
         path_to_data= './EPIC-KITCHENS',
         num_frames=16,
         transform=None
     )
 
-    # Create the DataLoader
+    # Training DataLoader
     train_loader = torch.utils.data.DataLoader(
         dataset=train_dataset,
         batch_size=4,
@@ -23,6 +76,25 @@ if __name__ == '__main__':
         num_workers=4       
     )
 
+    # ----------------------------- TESTING DATASET -----------------------------------
+    # Testing Dataset
+    test_dataset = EpicKitchensDataset(
+        path_to_data='./EPIC-KITCHENS',
+        # --- Point this to your validation/test file ---
+        csv_file='annotations/EPIC_100_validation.csv', 
+        num_frames=16,
+    )
+    
+    # Testing Dataloader
+    test_loader = torch.utils.data.DataLoader(
+        dataset=test_dataset,
+        batch_size=4, 
+        shuffle=False,
+        num_workers=4
+    )
+
+
+    # ---------------------------- PyTorch 3D-CNN MODEL ---------------------------------
     # Set up your device, model, loss, and optimizer
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # Number of distinct Epic Kitchens verbs
@@ -31,10 +103,13 @@ if __name__ == '__main__':
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-    # Train model
+
+    # ---------------------------- TRAINING LOOP ----------------------------------------
     print("Starting training...")
     num_epochs = 1
     for epoch in range(num_epochs):
+        
+        model.train()
 
         batch_loop = tqdm(train_loader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=False)
         # Without btach_loop we would iterate only over train_loader
@@ -55,3 +130,15 @@ if __name__ == '__main__':
             optimizer.step()
             
             print(f"Loss: {loss.item()}")
+
+    print("Training finished.")
+
+    # ------------------------------- SAVE TRAINED MODEL -----------------------------------
+    MODEL_SAVE_PATH = "epic_kitchens_model.pth"
+    print(f"Saving model to {MODEL_SAVE_PATH}...")
+    torch.save(model.state_dict(), MODEL_SAVE_PATH)
+    print("Model saved successfully.")
+
+    # ------------------------------------ TESTING -----------------------------------------
+    final_accuracy = evaluate_model(model, test_loader, device)
+    print(f"Final Model Accuracy: {final_accuracy:.2f}%")
