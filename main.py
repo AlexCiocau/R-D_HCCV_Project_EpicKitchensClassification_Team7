@@ -4,6 +4,26 @@ from ThreeD_CNN import ThreeD_CNN
 import torch.nn as nn
 from tqdm import tqdm
 
+# ------------------------- CUDA ---------------------------------
+
+# if torch.cuda.is_available():
+#     print("CUDA is available! Using GPU.")
+#     device = torch.device("cuda")
+# else:
+#     print("CUDA is not available. Using CPU.")
+#     device = torch.device("cpu")
+
+# # You can then check the name of your GPU
+# if device.type == "cuda":
+#     print(f"Using GPU: {torch.cuda.get_device_name(0)}")
+
+# print(f"PyTorch version: {torch.__version__}")
+# print(f"CUDA available?  {torch.cuda.is_available()}")
+# if torch.cuda.is_available():
+#     print(f"CUDA version PyTorch was built with: {torch.version.cuda}")
+#     print(f"Current GPU: {torch.cuda.get_device_name(0)}")
+
+#--------------------------------------------------------------------
 
 def evaluate_model(model, dataloader, device):
     """
@@ -65,40 +85,42 @@ if __name__ == '__main__':
     train_dataset = EpicKitchensDataset(
         path_to_data= './EPIC-KITCHENS',
         num_frames=16,
+        testing=False,
         transform=None
     )
 
     # Training DataLoader
     train_loader = torch.utils.data.DataLoader(
         dataset=train_dataset,
-        batch_size=4,
+        batch_size=32,
         shuffle=True,      
-        num_workers=4       
+        num_workers=6       
     )
 
     # ----------------------------- TESTING DATASET -----------------------------------
-    # Testing Dataset
-    test_dataset = EpicKitchensDataset(
-        path_to_data='./EPIC-KITCHENS',
-        # --- Point this to your validation/test file ---
-        csv_file='annotations/EPIC_100_validation.csv', 
-        num_frames=16,
-    )
+    # # Testing Dataset
+    # test_dataset = EpicKitchensDataset(
+    #     path_to_data='./EPIC-KITCHENS',
+    #     num_frames=16,
+    #     transform=None
+    # )
     
-    # Testing Dataloader
-    test_loader = torch.utils.data.DataLoader(
-        dataset=test_dataset,
-        batch_size=4, 
-        shuffle=False,
-        num_workers=4
-    )
+    # # Testing Dataloader
+    # test_loader = torch.utils.data.DataLoader(
+    #     dataset=test_dataset,
+    #     batch_size=4, 
+    #     shuffle=False,
+    #     num_workers=4
+    # )
 
 
     # ---------------------------- PyTorch 3D-CNN MODEL ---------------------------------
     # Set up your device, model, loss, and optimizer
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if device.type == "cuda":
+        print(f"Using GPU: {torch.cuda.get_device_name(0)}")
     # Number of distinct Epic Kitchens verbs
-    NUM_VERB_CLASSES = 125 
+    NUM_VERB_CLASSES = 97 
     model = ThreeD_CNN(num_classes=NUM_VERB_CLASSES).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -106,7 +128,7 @@ if __name__ == '__main__':
 
     # ---------------------------- TRAINING LOOP ----------------------------------------
     print("Starting training...")
-    num_epochs = 1
+    num_epochs = 10
     for epoch in range(num_epochs):
         
         model.train()
@@ -140,5 +162,5 @@ if __name__ == '__main__':
     print("Model saved successfully.")
 
     # ------------------------------------ TESTING -----------------------------------------
-    final_accuracy = evaluate_model(model, test_loader, device)
-    print(f"Final Model Accuracy: {final_accuracy:.2f}%")
+    # final_accuracy = evaluate_model(model, test_loader, device)
+    # print(f"Final Model Accuracy: {final_accuracy:.2f}%")
