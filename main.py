@@ -3,6 +3,7 @@ import torch
 from ThreeD_CNN import ThreeD_CNN
 import torch.nn as nn
 from tqdm import tqdm
+from torch.utils.data import WeightedRandomSampler
 
 # ------------------------- CUDA ---------------------------------
 
@@ -79,7 +80,6 @@ def evaluate_model(model, dataloader, device):
 
 if __name__ == '__main__':
 
-
     # ------------------------------- TRAINING DATASET -------------------------------
     # Training Dataset
     train_dataset = EpicKitchensDataset(
@@ -89,11 +89,40 @@ if __name__ == '__main__':
         transform=None
     )
 
+    # ------------------------------- Weighted sampler -------------------------------
+
+    print("Calculating dataset weights for sampler...")
+    # 1. Get the count for each class, ensure all classes are present
+    class_counts = train_dataset.annotations['verb_class'].value_counts().sort_index()
+    # Reindex to make sure we have an entry for all classes 0-88 (or 0-124)
+    # Use train_dataset.num_classes which you already calculated
+    class_counts = class_counts.reindex(range(97), fill_value=1) # Fill new classes with 1 to avoid /0
+
+    # 2. Get the weight for each class (1.0 / count)
+    class_weights = 1.0 / class_counts
+
+    # 3. Create a weight for EVERY sample in the dataset
+    sample_weights = class_weights[train_dataset.annotations['verb_class']].values
+    sample_weights = torch.from_numpy(sample_weights).double()
+
+    # 4. Create the sampler
+    sampler = WeightedRandomSampler(
+        weights=sample_weights,
+        num_samples=len(sample_weights),
+        replacement=True
+    )
+    print("Sampler created.")
+
+    # print("--- Training Data Class Balance ---")
+    # print(train_dataset.annotations['verb_class'].value_counts())
+    # print("---------------------------------")
+
     # Training DataLoader
     train_loader = torch.utils.data.DataLoader(
         dataset=train_dataset,
         batch_size=32,
-        shuffle=True,      
+        # shuffle=True,
+        sampler=sampler,      
         num_workers=6       
     )
 
@@ -128,7 +157,7 @@ if __name__ == '__main__':
 
     # ---------------------------- TRAINING LOOP ----------------------------------------
     print("Starting training...")
-    num_epochs = 10
+    num_epochs = 50
     for epoch in range(num_epochs):
         
         model.train()

@@ -34,7 +34,7 @@ if __name__ == '__main__':
     test_loader = DataLoader(
         dataset=test_dataset,
         batch_size=1,
-        shuffle=False, 
+        shuffle=True, 
         num_workers=0
     )
 
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
             # Get prediction
             outputs = model(video_batch)
-            print("Raw model output (logits):", outputs[0])
+            # print("Raw model output (logits):", outputs[0])
             _, prediction = torch.max(outputs, 1)
 
             # Get the numbers

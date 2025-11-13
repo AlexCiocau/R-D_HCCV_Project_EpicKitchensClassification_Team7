@@ -109,6 +109,12 @@ class EpicKitchensDataset(Dataset):
         #     return clip_tensor, label
         # except Exception as e:
         #     pass
+
+
+
+
+
+    # ------------------------------------------------------------------------------
     # 1. Get the annotation row
         row = self.annotations.iloc[idx]
         
