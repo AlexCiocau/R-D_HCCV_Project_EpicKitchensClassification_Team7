@@ -14,7 +14,9 @@ print("CV2 version: ", cv2.__version__)
 # --- Configuration ---
 ANNOTATION_FILE = './EPIC-KITCHENS/annotations/epic_train_split.csv'
 VIDEO_DIR = './EPIC-KITCHENS/videos_640x360' 
-TENSOR_OUTPUT_DIR = './EPIC-KITCHENS/tensors_v2' 
+# Use os.path.expandvars to read the $VSC_SCRATCH variable
+TENSOR_OUTPUT_DIR_RAW = '$VSC_SCRATCH/tensors' 
+TENSOR_OUTPUT_DIR = os.path.expandvars(TENSOR_OUTPUT_DIR_RAW)
 NUM_FRAMES = 16 
 IMAGE_SIZE = 224 
 # ---------------------
@@ -23,7 +25,7 @@ IMAGE_SIZE = 224
 KINETICS_MEAN = [0.43216, 0.394666, 0.37645]
 KINETICS_STD  = [0.22803, 0.22145, 0.216989]
 
-train_transform = T.Compose([
+transform = T.Compose([
     # Training augmentation: Randomly crops a square and resizes it.
     T.RandomResizedCrop((112, 112)), 
     T.ToTensor(),
@@ -50,6 +52,13 @@ def get_frame_indices(total_frames, num_frames_to_sample):
 def main():
     print("Loading annotations...")
     annotations = pd.read_csv(ANNOTATION_FILE)
+
+    # --------------------- CHECK IF WE'RE IN THE CORRECT LOCATION --------------------------------
+    if '$VSC_SCRATCH' in TENSOR_OUTPUT_DIR:
+        print(f"Error: $VSC_SCRATCH environment variable not set or not expanded.")
+        print(f"Path is still: {TENSOR_OUTPUT_DIR}")
+        return # Stop the script
+    # --------------------------------------------------------------------------------------------------
 
     print(f"Ensuring output directory exists: {TENSOR_OUTPUT_DIR}")
     os.makedirs(TENSOR_OUTPUT_DIR, exist_ok=True)

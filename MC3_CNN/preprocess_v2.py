@@ -7,10 +7,12 @@ from PIL import Image
 import numpy as np
 from tqdm import tqdm
 print("CV2 version: ", cv2.__version__)
+
+
 # --- Configuration ---
 ANNOTATION_FILE = './EPIC-KITCHENS/annotations/epic_train_split.csv'
 VIDEO_DIR = './EPIC-KITCHENS/videos_640x360' 
-TENSOR_OUTPUT_DIR = './EPIC-KITCHENS/tensors_16frame' 
+TENSOR_OUTPUT_DIR = './EPIC-KITCHENS/tensors' 
 NUM_FRAMES = 16 
 IMAGE_SIZE = 224 
 # ---------------------

@@ -66,6 +66,7 @@ if __name__ == '__main__':
         print(f"Using GPU: {torch.cuda.get_device_name(0)}")
     # Number of distinct Epic Kitchens verbs
     NUM_VERB_CLASSES = 97 
+    # .to(devide) sends the model to the GPU! Very important to add it!
     model = ThreeD_CNN(num_classes=NUM_VERB_CLASSES).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
