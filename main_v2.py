@@ -4,6 +4,8 @@ from ThreeD_CNN import ThreeD_CNN
 import torch.nn as nn
 from tqdm import tqdm
 from torch.utils.data import WeightedRandomSampler
+import torchvision.models.video as video_models
+
 
 # ------------------------- CUDA ---------------------------------
 
@@ -68,10 +70,10 @@ if __name__ == '__main__':
     # Training DataLoader
     train_loader = torch.utils.data.DataLoader(
         dataset=train_dataset,
-        batch_size=32,
+        batch_size=4,
         # shuffle=True,
         sampler=sampler,      
-        num_workers=6       
+        num_workers=4       
     )
 
     # ---------------------------- PyTorch 3D-CNN MODEL ---------------------------------
@@ -80,10 +82,26 @@ if __name__ == '__main__':
     if device.type == "cuda":
         print(f"Using GPU: {torch.cuda.get_device_name(0)}")
     # Number of distinct Epic Kitchens verbs
-    NUM_VERB_CLASSES = 97 
-    model = ThreeD_CNN(num_classes=NUM_VERB_CLASSES).to(device)
+    # NUM_VERB_CLASSES = 97 
+    # model = ThreeD_CNN(num_classes=NUM_VERB_CLASSES).to(device)
+    # criterion = nn.CrossEntropyLoss()
+    # optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+    # Number of classes
+    NUM_VERB_CLASSES = 97
+
+    # Load pretrained MC3-18
+    print("Loading pretrained MC3-18 model...")
+    model = video_models.mc3_18(weights="DEFAULT")
+
+    # Replace classifier
+    num_features = model.fc.in_features
+    model.fc = nn.Linear(num_features, NUM_VERB_CLASSES)
+
+    model = model.to(device)
+
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)  # lower LR recommended for pretrained models
 
 
     # ---------------------------- TRAINING LOOP ----------------------------------------

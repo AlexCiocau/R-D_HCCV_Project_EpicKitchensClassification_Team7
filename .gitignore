@@ -3,6 +3,7 @@ videos_640x360/
 
 # gitignore for Alex
 EPIC-KITCHENS/
+wandb/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
