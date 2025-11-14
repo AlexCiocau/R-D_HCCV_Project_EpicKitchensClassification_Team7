@@ -106,7 +106,7 @@ if __name__ == '__main__':
 
     # ---------------------------- TRAINING LOOP ----------------------------------------
     print("Starting training...")
-    num_epochs = 50
+    num_epochs = 1
     for epoch in range(num_epochs):
         
         model.train()

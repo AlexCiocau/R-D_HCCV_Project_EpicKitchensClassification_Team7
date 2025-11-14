@@ -1,40 +1,36 @@
 import torch
 from ThreeD_CNN import ThreeD_CNN  
-from dataloader import EpicKitchensDataset 
+from EpicKitchensDataset import EpicKitchensDataset 
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import torch.nn as nn
 
 if __name__ == '__main__':
+
+    # ---------------------- PARAMETERS ----------------------------------
     MODEL_PATH = "epic_kitchens_model.pth"
     NUM_VERB_CLASSES = 97 # MUST be the same as you used for training
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if device.type == "cuda":
             print(f"Using GPU: {torch.cuda.get_device_name(0)}")
 
-    # You first build the "empty shell" of the model
+    # ---------------------- LOAD MODEL ----------------------------------
     print("Creating model structure...")
     model = ThreeD_CNN(num_classes=NUM_VERB_CLASSES).to(device)
-
-    # --- 3. LOAD THE SAVED WEIGHTS ---
     print(f"Loading trained weights from {MODEL_PATH}...")
     model.load_state_dict(torch.load(MODEL_PATH))
 
-    # --- 4. SET MODEL TO EVALUATION MODE (CRITICAL!) ---
-    # This turns off dropout, batchnorm updates, etc.
+    # ---------------------- EVALUATION MODE ----------------------------------
+    # Turns off dropout, batchnorm updates, etc.
     model.train()
 
-    # --- 5. PREPARE YOUR TEST DATA ---
+    # ---------------------- DATASET and DATALOADER ----------------------------
     train_dataset = EpicKitchensDataset(
         path_to_data='./EPIC-KITCHENS',
         num_frames=16,
         testing=False,
         transform=None
     )
-
-    print("--- Training Data Class Balance ---")
-    print(train_dataset.annotations['verb_class'].value_counts())
-    print("---------------------------------")
 
     train_loader = DataLoader(
         dataset=train_dataset,
@@ -43,7 +39,7 @@ if __name__ == '__main__':
         num_workers=8
     )
 
-    # Optimizer
+    # ---------------------- OPTIMIZER and LOSS ----------------------------------
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 

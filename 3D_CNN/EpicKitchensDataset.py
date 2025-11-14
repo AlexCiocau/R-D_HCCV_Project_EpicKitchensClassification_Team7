@@ -71,6 +71,7 @@ class EpicKitchensDataset(Dataset):
         return len(self.annotations)
 
     def __getitem__(self, idx):
+        # ----------------------------------- NORMAL IMPLEMENTATION -------------------------------------------
         # try:
         #     # Retrieve a sample: a clip and its label (! a clip is a short sequence; there are multiple in one video)
         #     annotation = self.annotations.iloc[idx]
@@ -110,37 +111,19 @@ class EpicKitchensDataset(Dataset):
         # except Exception as e:
         #     pass
 
-
-
-
-
-    # ------------------------------------------------------------------------------
-    # 1. Get the annotation row
+        # ----------------------------------- TENSOR IMPLEMENTATION -------------------------------------------
         row = self.annotations.iloc[idx]
-        
-        # --- THIS LINE IS FIXED ---
         segment_uid = row['narration_id'] # Changed from 'uid' to 'narration_id'
-        # --------------------------
-        
-        # 2. Get the label
         label = int(row['verb_class']) 
-        
-        # 3. Define the path to the pre-saved tensor
         tensor_path = os.path.join(self.path_to_tensors, f"{segment_uid}.pt")
 
         try:
-            # 4. Load the tensor directly from disk
             video_tensor = torch.load(tensor_path)
-            
-            # 5. Return the tensor and label
             return video_tensor, label
-            
         except FileNotFoundError:
-            # Return the next valid item
             return self.__getitem__((idx + 1) % len(self))
             
         except Exception as e:
-            # Handle other corrupt files
             print(f"Error loading tensor at index {idx} ({tensor_path}): {e}")
             return self.__getitem__((idx + 1) % len(self))
     

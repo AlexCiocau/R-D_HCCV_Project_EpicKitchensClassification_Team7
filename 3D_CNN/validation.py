@@ -1,6 +1,6 @@
 import torch
 from ThreeD_CNN import ThreeD_CNN  
-from dataloader import EpicKitchensDataset 
+from EpicKitchensDataset import EpicKitchensDataset 
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 # You would also import OpenCV (cv2) here for adding overlays
