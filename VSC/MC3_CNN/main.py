@@ -132,7 +132,7 @@ if __name__ == '__main__':
     # .to(devide) sends the model to the GPU! Very important to add it!
     model = model.to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE, weight_decay=1e-5)
 
     # ---------------------------- LR SCHEDULER & EARLY STOPPING ----------------------
     # Scheduler: Reduce LR when validation loss plateaus
@@ -209,6 +209,7 @@ if __name__ == '__main__':
             "val/epoch_loss": avg_val_loss,
             "val/accuracy": val_accuracy,
             "learning_rate": current_lr,
+            "weight_decay": 1e-5,
             "epoch": epoch + 1
         })
 
