@@ -5,7 +5,7 @@ videos_640x360/
 EPIC-KITCHENS/
 
 # PyTorch model weights
-*.pth
+# *.pth
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
