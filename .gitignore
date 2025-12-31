@@ -4,6 +4,9 @@ videos_640x360/
 # gitignore for Alex
 EPIC-KITCHENS/
 
+# PyTorch model weights
+*.pth
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
