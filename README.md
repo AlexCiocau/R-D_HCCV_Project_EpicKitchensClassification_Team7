@@ -33,5 +33,7 @@ The repository is organized to ensure reproducibility and modularity, separating
 ├── results/                
 │   ├── Saved models (weights)/  # Saved model checkpoints (.pth)
 │   └── submissions/        # Generated submission files for the leaderboard
-├── requirements.txt        # Python dependencies
-└── README.md               # Project documentation
+├── .gitattributes          
+├── .gitignore              
+├── requirements.txt        
+└── README.md              
