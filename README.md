@@ -16,7 +16,7 @@ The goal is to predict an **Action** defined as a combination of a **Verb** (Mot
 * **Efficient Fusion:** Concatenates an X3D motion backbone with a ConvNeXt spatial backbone.
 * **Robust Training:** Utilizes Hybrid Weighted Random Sampling and GPU-accelerated augmentation to handle severe class imbalance (long-tail distribution).
 
-## 📂 Project Structure
+## Project Structure
 The repository is organized to ensure reproducibility and modularity, separating data, scripts, and source code.
 
 ```text
