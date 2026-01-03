@@ -1,3 +1,21 @@
+"""
+==============================================================================
+VARIANT: K-FOLD TRAINING SCRIPT
+==============================================================================
+filename: ConvNextTiny_kfold.py
+
+[PURPOSE]
+Trains the ConvNeXt-Tiny model on a specific fold of the dataset.
+It uses command-line arguments to switch between folds (0-4) without 
+changing the code manually.
+
+[USAGE]
+Run for each fold sequentially or in parallel:
+$ python src/models/ConvNeXt-Tiny/ConvNextTiny_kfold.py --fold 0
+$ python src/models/ConvNeXt-Tiny/ConvNextTiny_kfold.py --fold 1
+...
+==============================================================================
+"""
 import argparse
 import torch
 import torch.nn as nn

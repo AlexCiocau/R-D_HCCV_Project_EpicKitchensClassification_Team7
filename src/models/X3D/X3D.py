@@ -1,3 +1,25 @@
+"""
+==============================================================================
+STEP 1: MAIN TRAINING LOOP (PHASE 1)
+==============================================================================
+filename: X3D.py
+
+[PURPOSE]
+This is the PRIMARY script for training the Temporal Stream (X3D).
+It performs the following:
+1. Loads the X3D-M model from Torch Hub (pretrained on Kinetics400).
+2. Freezes early layers (Stem & Stage 1) to preserve learned motion features.
+3. Replaces the classification head to match EPIC-KITCHENS classes.
+4. Trains using Mixed Precision (AMP) and Weighted Random Sampling.
+
+[USAGE]
+Run this file to start training from scratch (or from Kinetics weights):
+$ python src/models/X3D/X3D.py
+
+[OUTPUT]
+Saves the best model weights to: "x3d_tmpaug_model_5.pth"
+==============================================================================
+"""
 from EpicKitchensDataset import EpicKitchensDataset
 import torch
 import torch.nn as nn

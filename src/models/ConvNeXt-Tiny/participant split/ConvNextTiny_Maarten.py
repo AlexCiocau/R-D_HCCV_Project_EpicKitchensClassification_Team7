@@ -1,3 +1,20 @@
+"""
+==============================================================================
+EXPERIMENTAL: MULTI-VIEW EVALUATION
+==============================================================================
+filename: ConvNextTiny_Maarten.py
+
+[PURPOSE]
+An advanced iteration of the ConvNeXt training script.
+KEY FEATURE: 'evaluate_model' uses Multi-View Testing.
+Instead of evaluating on a single middle frame, it samples 3 frames 
+(early, middle, late) for every validation video and averages the predictions.
+This typically results in higher and more stable accuracy.
+
+[CONFIG]
+Augmentation intensity (ColorJitter) is reduced to preserve food colors.
+==============================================================================
+"""
 from EpicKitchensDataset_vNouns_participant import EpicKitchensDataset
 import torch
 import torch.nn as nn

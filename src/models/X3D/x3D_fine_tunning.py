@@ -1,3 +1,24 @@
+"""
+==============================================================================
+STEP 2: FINE-TUNING & REFINEMENT (PHASE 2)
+==============================================================================
+filename: x3D_fine_tunning.py
+
+[PURPOSE]
+Run this script AFTER 'X3D.py' has finished. 
+It loads the checkpoint saved in Step 1 and refines the model by:
+1. Unfreezing more layers (or all layers) for fine-tuning.
+2. Using "Differential Learning Rates" (Slow learning for backbone, Fast for head).
+3. Applying aggressive regularization (Weight Decay) to prevent overfitting.
+
+[USAGE]
+Ensure 'LOAD_CHECKPOINT_PATH' points to the output of Step 1.
+$ python src/models/X3D/x3D_fine_tunning.py
+
+[OUTPUT]
+Saves the final refined model to: "x3d_m_phase2_rescue.pth"
+==============================================================================
+"""
 from EpicKitchensDataset import EpicKitchensDataset
 import torch
 import torch.nn as nn

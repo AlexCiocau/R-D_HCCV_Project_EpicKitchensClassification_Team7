@@ -1,3 +1,21 @@
+"""
+==============================================================================
+STEP 3: MODEL ASSEMBLY & VERIFICATION
+==============================================================================
+filename: assemble_and_evaluate.py
+
+[PURPOSE]
+This script re-assembles the complete end-to-end model for deployment.
+1. Instantiates the full 'TwoStreamModel'.
+2. Loads X3D weights (from Phase 1).
+3. Loads ConvNeXt weights (from Phase 1).
+4. Loads MLP weights (from Step 2).
+5. Performs a 'Sanity Check' on the validation set to ensure accuracy matches.
+
+[OUTPUT]
+Saves the fully assembled model to: "twostream_retrained.pth"
+==============================================================================
+"""
 import torch
 import torch.nn as nn
 from tqdm import tqdm

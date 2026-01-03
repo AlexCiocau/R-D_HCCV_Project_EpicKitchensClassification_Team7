@@ -1,3 +1,23 @@
+"""
+==============================================================================
+STEP 2: FAST FUSION TRAINING (MLP)
+==============================================================================
+filename: 2_train_mlp_fast.py
+
+[PURPOSE]
+Trains the lightweight 'FusionMLP' (Multi-Layer Perceptron) using the 
+feature vectors generated in Step 1.
+1. Loads features into RAM (very fast).
+2. Learns to combine Motion (X3D) and Static (ConvNeXt) features.
+3. Optimizes for combined Verb/Noun accuracy.
+
+[USAGE]
+Run this after '1_extract_features.py' finishes.
+
+[OUTPUT]
+Saves the best fusion weights to: "mlp_best_weights.pth"
+==============================================================================
+"""
 import torch
 import torch.nn as nn
 import os

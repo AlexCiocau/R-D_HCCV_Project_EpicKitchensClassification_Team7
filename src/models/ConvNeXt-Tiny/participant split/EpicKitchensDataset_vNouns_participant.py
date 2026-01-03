@@ -1,3 +1,15 @@
+"""
+==============================================================================
+VARIANT: PARTICIPANT SPLIT DATASET
+==============================================================================
+filename: EpicKitchensDataset_vNouns_participant.py
+
+[PURPOSE]
+Specialized dataset that loads the 'Participant Split' CSVs.
+Used to evaluate how well the model generalizes to UNSEEN people (kitcheners)
+not present in the training set.
+==============================================================================
+"""
 from torch.utils.data import Dataset
 import pandas as pd
 import torch

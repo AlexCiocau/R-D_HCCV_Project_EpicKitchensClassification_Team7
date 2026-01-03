@@ -1,4 +1,19 @@
-# EpicKitchensDataset_KFold.py
+"""
+==============================================================================
+VARIANT: K-FOLD DATASET
+==============================================================================
+filename: EpicKitchensDataset_KFold.py
+
+[PURPOSE]
+A dynamic dataset class designed for K-Fold Cross Validation.
+Unlike the standard dataset, this class does NOT hardcode the CSV paths.
+Instead, it accepts a specific 'csv_path' argument (e.g., 'train_fold_0.csv')
+passed from the training script.
+
+[USAGE]
+Imported by 'ConvNextTiny_kfold.py'.
+==============================================================================
+"""
 from torch.utils.data import Dataset
 import pandas as pd
 import torch

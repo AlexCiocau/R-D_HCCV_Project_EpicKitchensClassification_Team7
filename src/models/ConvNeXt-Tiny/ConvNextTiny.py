@@ -1,3 +1,25 @@
+"""
+==============================================================================
+STEP 1: SPATIAL TRAINING (CONVNEXT-TINY)
+==============================================================================
+filename: ConvNextTiny.py
+
+[PURPOSE]
+This script trains the Spatial Stream to recognize Objects (Nouns).
+It implements a modern training pipeline:
+1. Model: Loads 'ConvNeXt-Tiny' with ImageNet-1K pretrained weights.
+2. Sampling: Randomly selects a SINGLE frame from the video clip to treat as an image.
+3. Augmentation: Uses a 'GPUAugmentor' class to apply MixUp, CutMix, and 
+   ColorJitter directly on the GPU (faster than CPU).
+4. Scheduler: Uses Cosine Annealing for smooth learning rate decay.
+
+[USAGE]
+$ python src/models/ConvNeXt-Tiny/ConvNextTiny.py
+
+[OUTPUT]
+Saves the best weights to: "convnext_tiny_noun_best.pth"
+==============================================================================
+"""
 from EpicKitchensDataset_vNouns import EpicKitchensDataset
 import torch
 import torch.nn as nn

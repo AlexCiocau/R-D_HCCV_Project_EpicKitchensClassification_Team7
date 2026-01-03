@@ -1,3 +1,21 @@
+"""
+==============================================================================
+STEP 0: THE DATASET (FOUNDATION)
+==============================================================================
+filename: EpicKitchensDataset.py
+
+[PURPOSE]
+This file defines the custom PyTorch Dataset class. It handles:
+1. Loading pre-computed tensors from the disk (created by tensor_gen scripts).
+2. Parsing the CSV annotations (train/val splits).
+3. Applying Data Augmentation (ColorJitter, RandomCrop, HorizontalFlip).
+
+[USAGE]
+You do not run this file directly. 
+It is imported by 'X3D.py' and 'x3D_fine_tunning.py' to load data.
+==============================================================================
+"""
+
 from torch.utils.data import Dataset
 import pandas as pd
 import torch

@@ -1,3 +1,16 @@
+"""
+==============================================================================
+VARIANT: RETRAINING DATASET (FIXED NOUNS)
+==============================================================================
+filename: EpicKitchensDataset_vNouns_retrained.py
+
+[PURPOSE]
+A stabilized version of the Noun dataset.
+It explicitly hardcodes 'num_classes = 300' to prevent dynamic counting errors
+that might occur if a batch is missing rare classes. 
+It uses 'custom_noun_train_80.csv'.
+==============================================================================
+"""
 from torch.utils.data import Dataset
 import pandas as pd
 import torch

@@ -1,3 +1,15 @@
+"""
+==============================================================================
+VARIANT: RETRAINING LOOP
+==============================================================================
+filename: ConvNextTiny_retrained.py
+
+[PURPOSE]
+The standard training loop for the 'Retrained' dataset variant.
+It is functionally similar to the main training script but points specifically 
+to the fixed-noun dataset wrapper.
+==============================================================================
+"""
 from EpicKitchensDataset_vNouns_retrained import EpicKitchensDataset
 import torch
 import torch.nn as nn

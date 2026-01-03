@@ -1,3 +1,24 @@
+"""
+==============================================================================
+STEP 1: FEATURE EXTRACTION (OFFLINE)
+==============================================================================
+filename: 1_extract_features.py
+
+[PURPOSE]
+This script optimizes training speed by pre-calculating the output of your 
+heavy backbones (X3D and ConvNeXt).
+1. Loads pre-trained X3D and ConvNeXt weights.
+2. Runs the entire dataset through them in 'Eval' mode.
+3. Saves the output vectors (2048-dim motion, 768-dim static) to disk.
+
+[WHY?]
+By saving these vectors, you can train the Fusion MLP (Step 2) in seconds 
+instead of days, because you don't have to run the heavy CNNs every epoch.
+
+[OUTPUT]
+Saves .pt files to "$VSC_SCRATCH/feature_vectors_v2"
+==============================================================================
+"""
 import torch
 import torch.nn as nn
 import os

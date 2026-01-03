@@ -1,3 +1,22 @@
+"""
+==============================================================================
+VARIANT: SUBMISSION DATASET (CODABENCH)
+==============================================================================
+filename: EpicKitchensDataset_vMulti_weighted_v2_sub.py
+
+[PURPOSE]
+This is a specialized version of the V2 dataset used for LEADERBOARD SUBMISSIONS.
+Unlike the standard training dataset, this variant:
+1. Points to the OFFICIAL validation CSV ('EPIC_100_validation.csv').
+2. Loads tensors from the 'x3d_codabench_val' directory (unseen test data).
+3. Is used by 'generate_submission.py' to produce the final .json/.csv files 
+   required for the Epic-Kitchens challenge.
+
+[USAGE]
+Imported by your submission generation scripts when you are ready to 
+evaluate on the official test server.
+==============================================================================
+"""
 from torch.utils.data import Dataset
 import pandas as pd
 import torch

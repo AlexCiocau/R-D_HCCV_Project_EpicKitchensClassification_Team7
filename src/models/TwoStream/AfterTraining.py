@@ -1,4 +1,20 @@
-# CHANGE 1: Use the V2 dataset (No internal normalization)
+"""
+==============================================================================
+STEP 4: END-TO-END FINE-TUNING
+==============================================================================
+filename: AfterTraining.py
+
+[PURPOSE]
+This script performs the final polish on the assembled model.
+1. Loads the full 'TwoStreamModel' (assembled in Step 3).
+2. Unfreezes the backbones (X3D and ConvNeXt).
+3. Trains the entire system with a very low learning rate (1e-6).
+4. Uses 'FocalLoss' to focus on hard/rare classes.
+
+[USAGE]
+Run this to squeeze the final few % of accuracy out of the model.
+==============================================================================
+"""
 from EpicKitchensDataset_vMulti_weighted_v2 import EpicKitchensDataset
 import torch
 import torch.nn as nn

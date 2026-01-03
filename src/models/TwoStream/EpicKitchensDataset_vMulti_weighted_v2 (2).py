@@ -1,3 +1,20 @@
+"""
+==============================================================================
+STEP 0: FUSION DATASET (MULTI-LABEL V2)
+==============================================================================
+filename: EpicKitchensDataset_vMulti_weighted_v2 (2).py
+
+[PURPOSE]
+This is the 'V2' dataset class designed for the Two-Stream Fusion model.
+1. Multi-Label: Returns a dictionary {'verb': v, 'noun': n} for every sample.
+2. Raw Output: Returns tensors in [0-1] range WITHOUT normalization. 
+   Normalization is deliberately offloaded to the 'GPUAugmentor' in the 
+   training scripts to allow for correct ImageNet stats application on the GPU.
+
+[USAGE]
+Imported by '1_extract_features.py', 'AfterTraining.py', etc.
+==============================================================================
+"""
 from torch.utils.data import Dataset
 import pandas as pd
 import torch

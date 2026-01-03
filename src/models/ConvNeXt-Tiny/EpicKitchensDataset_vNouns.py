@@ -1,3 +1,21 @@
+"""
+==============================================================================
+STEP 0: SPATIAL DATASET (NOUNS)
+==============================================================================
+filename: EpicKitchensDataset_vNouns.py
+
+[PURPOSE]
+This dataset class is specialized for the SPATIAL STREAM (ConvNeXt-Tiny).
+It differs from the temporal dataset in several key ways:
+1. Target: It retrieves 'noun_class' labels (Objects) instead of 'verb_class'.
+2. Efficiency: It returns RAW tensors without complex CPU transformations. 
+   Heavy augmentations (Crop, Resize, MixUp) are offloaded to the 'GPUAugmentor'
+   in the training script to maximize speed.
+
+[USAGE]
+Imported by 'ConvNextTiny.py' to load training and validation data.
+==============================================================================
+"""
 from torch.utils.data import Dataset
 import pandas as pd
 import torch
