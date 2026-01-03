@@ -1,3 +1,24 @@
+"""
+==============================================================================
+STEP -1: TENSOR GENERATION (PRE-PROCESSING)
+==============================================================================
+filename: tensor_gen_x3d_fixed.py
+
+[PURPOSE]
+This script converts raw MP4 video files into lightweight PyTorch tensors (.pt).
+1. Reads videos from 'videos_640x360'.
+2. Extracts frames based on 'start_frame'/'stop_frame' from CSVs.
+3. Resizes and Crops frames to 256x256.
+4. Saves them as Float16 tensors to the Scratch directory.
+
+[USAGE]
+Run this ONCE before any training.
+$ python scripts/preprocessing/tensor_gen_x3d_fixed.py
+
+[OUTPUT]
+Generates thousands of .pt files in "$VSC_SCRATCH/x3d_train_tensors"
+==============================================================================
+"""
 import cv2
 import pandas as pd
 import os

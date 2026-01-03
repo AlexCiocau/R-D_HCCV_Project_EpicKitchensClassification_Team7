@@ -1,3 +1,22 @@
+"""
+==============================================================================
+VARIANT: HIGH-PERFORMANCE TRAINING ("IAMSPEED")
+==============================================================================
+filename: iamspeed.py
+
+[PURPOSE]
+An optimized training script designed for maximum accuracy and speed.
+KEY FEATURES:
+1. Consensus Evaluation: Uses 'FiveCrop' + Temporal Averaging (Multiple Views)
+   during validation for robust metrics.
+2. Aggressive Augmentation: Uses 'RandomResizedCrop(0.4, 1.0)' (Zoom in) 
+   to force the model to look at object details.
+3. Layer-Wise LR Decay: Lowers learning rate for early layers.
+
+[USAGE]
+Use this for your best/final training runs.
+==============================================================================
+"""
 from EpicKitchensDataset_vNouns_participant import EpicKitchensDataset
 import torch
 import torch.nn as nn

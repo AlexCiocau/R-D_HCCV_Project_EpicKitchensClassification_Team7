@@ -1,3 +1,22 @@
+"""
+==============================================================================
+DEBUG: SYSTEM THROUGHPUT TEST
+==============================================================================
+filename: sanity_check.py
+
+[PURPOSE]
+Runs a quick "stress test" on the GPU and Dataloader.
+1. Loads a mini-dataset (200 samples) into RAM.
+2. Runs a dummy training loop.
+3. Measures 'Batches Per Second'.
+   - If < 0.5 sec/batch: System is healthy.
+   - If > 0.5 sec/batch: You have a bottleneck (CPU/Disk).
+
+[USAGE]
+Run inside a debug job:
+$ python scripts/sanity_check.py
+==============================================================================
+"""
 import time
 import torch
 import torch.nn as nn

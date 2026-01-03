@@ -1,3 +1,15 @@
+"""
+==============================================================================
+DEBUG: RAM-CACHED DATASET
+==============================================================================
+filename: sanity_dataset.py
+
+[PURPOSE]
+A specialized dataset class for debugging I/O speed.
+It uses 'ThreadPoolExecutor' to load samples into RAM (Cache) immediately.
+Used by 'sanity_check.py' to test GPU throughput without disk bottlenecks.
+==============================================================================
+"""
 from torch.utils.data import Dataset
 import pandas as pd
 import torch

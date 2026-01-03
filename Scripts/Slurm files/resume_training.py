@@ -1,3 +1,20 @@
+"""
+==============================================================================
+UTILITY: RESUME TRAINING
+==============================================================================
+filename: resume_training.py
+
+[PURPOSE]
+A dedicated script to continue training from a saved checkpoint.
+Use this if a job crashes or times out on the HPC.
+1. Loads the model state from 'PREV_MODEL_PATH'.
+2. Fast-forwards the LR Scheduler to 'START_EPOCH'.
+3. Initializes the EarlyStopper with the previous best loss.
+
+[CONFIG]
+Update 'PREV_MODEL_PATH' and 'START_EPOCH' manually before running.
+==============================================================================
+"""
 from EpicKitchensDataset_vNouns_participant import EpicKitchensDataset
 import torch
 import torch.nn as nn
