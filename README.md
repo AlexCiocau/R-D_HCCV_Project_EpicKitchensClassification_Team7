@@ -36,7 +36,8 @@ The repository is organized to ensure reproducibility and modularity, separating
 ├── .gitattributes          
 ├── .gitignore              
 ├── requirements.txt        
-└── README.md              
+└── README.md
+```              
 
 ## Step-by-Step Guide: Training & Evaluation
 
@@ -75,7 +76,6 @@ Run `ConvNeXtTiny.py`.
 Locate the scripts in `src/models/TwoStream/` and execute them in the following order:
 1. `1_extract_features.py`: Extracts feature vectors from both trained backbones.
 2. `2_train_mlp_fast.py`: Trains the MLP to fuse the spatial and temporal features.
-3. `AfterTraining.py`: Finalizes the fusion module configuration.
 
 #### 3.4 Model Assembly & Final Evaluation
 Run `assemble_and_evaluate.py`.
