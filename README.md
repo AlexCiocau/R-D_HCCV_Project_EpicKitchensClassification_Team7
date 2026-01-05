@@ -1,7 +1,7 @@
 # EpicKitchens Video Classification (Team 7)
 
-**Authors:** Joren Van den Vondel, Maarten Luypaert, Alexandru-Mihai Ciocău  
-**Course:** R-D HCCV Project  
+**Authors:** Alexandru-Mihai Ciocău, Maarten Luypaert, Joren Van den Vondel  
+**Course:** R&D Human-Centered Computer Vision Project  
 
 ## Project Overview
 This repository contains the implementation of a robust heterogeneous **Two-Stream AI model** for end-to-end egocentric action recognition on the [EPIC-KITCHENS-100 dataset](https://epic-kitchens.github.io/2025).
@@ -27,7 +27,7 @@ The repository is organized to ensure reproducibility and modularity, separating
 │   │   └── TwoStream/      # Fusion logic (feature extraction & MLP)
 │   └── utils/              # Helper functions (early_stopping.py)
 ├── scripts/                
-│   ├── Dataset splits/     # Split generation (create_noun_split.py, create_splits.py)
+│   ├── Dataset splits/     # Split generation (create_ptcp_split.py, create_splits.py)
 │   ├── Tensor generation/  
 │   └── Slurm files/        
 ├── results/                
@@ -70,7 +70,8 @@ Run `X3D.py`.
 
 #### 3.2 Train the ConvNeXt Branch (Spatial)
 Run `ConvNeXtTiny.py`.
-* **Output:** Trains the spatial backbone and saves the weights for the ConvNeXt-Tiny model.
+* **Process:** Initializes the ConvNeXt-Tiny model with weights pretrained on **ImageNet**.
+* **Output:** Trains the spatial backbone and saves the weights for the  model.
 
 #### 3.3 Train the MLP Fusion
 Locate the scripts in `src/models/TwoStream/` and execute them in the following order:
@@ -87,4 +88,3 @@ To generate inference results for the leaderboard:
 
 1. **Inference:** Run `generate_submission.py` to create the `.pth` file containing predictions on the test set.
 2. **Verification:** Use `View_Submission.py` to inspect the contents of the generated submission file.
-
